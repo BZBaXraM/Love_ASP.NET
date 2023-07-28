@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using ToDo_Web_APi.Models;
+
 namespace ToDo_Web_APi.Data;
 
 public class ToDoDbContext : DbContext
@@ -6,5 +9,5 @@ public class ToDoDbContext : DbContext
     {
     }
 
-    public DbSet<ToDoItem> ToDoItems { get; set; }
+    public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
 }

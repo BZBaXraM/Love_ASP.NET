@@ -12,7 +12,7 @@ using ToDo_Web_APi.Data;
 namespace ToDo_Web_APi.Migrations
 {
     [DbContext(typeof(ToDoDbContext))]
-    [Migration("20230728103343_Initial")]
+    [Migration("20230728154327_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

@@ -1,4 +1,7 @@
-using ASP_EF_Pagination.Models;
+using Microsoft.AspNetCore.Mvc;
+using ToDo_Web_APi.Data;
+using ToDo_Web_APi.DTOs;
+using ToDo_Web_APi.DTOs.Pagination;
 using ToDo_WEB_API.DTOs.Pagination;
 using ToDo_Web_APi.Services;
 

@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using ToDo_Web_APi.Data;
+using ToDo_Web_APi.DTOs;
+using ToDo_Web_APi.DTOs.Pagination;
 using ToDo_WEB_API.DTOs.Pagination;
+using ToDo_Web_APi.Models;
 
 namespace ToDo_Web_APi.Services;
 
@@ -28,7 +33,7 @@ public class ToDoService : IAsyncToDoService
     public async Task<ToDoItemDto> ChangeTodoItemStatusAsync(int id, bool isCompleted)
     {
         var item = await _context.ToDoItems.FindAsync(id);
-        if (item is null) return null!;
+        if (item is null) return null;
         item.IsCompleted = isCompleted;
         item.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
@@ -115,16 +120,3 @@ public class ToDoService : IAsyncToDoService
         return todoItem;
     }
 }
-
-/*
- * Id	Text	IsCompleted	CreatedAt	UpdatedAt
-3	First todo	FALSE	2023-07-27 23:16:49.95326+04	2023-07-27 23:16:49.95326+04
-4	Second todo	FALSE	2023-07-27 23:17:27.803533+04	2023-07-27 23:17:27.803533+04
-5	To be or not to be	FALSE	2023-07-27 23:18:15.2619+04	2023-07-27 23:18:15.2619+04
-6	First lesson in STEP IT Academy with Nadir Zamanov: 04.10.2021	FALSE	2023-07-27 23:24:13.00282+04	2023-07-27 23:24:13.00282+04
-7	Evde 4 ay oturmaq	FALSE	2023-07-27 23:25:04.813541+04	2023-07-27 23:25:04.813541+04
-8	System programming is love	FALSE	2023-07-27 23:25:38.789469+04	2023-07-27 23:25:38.789469+04
-9	My old friend from 2021: Suleyman Babayev	FALSE	2023-07-27 23:26:40.894327+04	2023-07-27 23:26:40.894327+04
-10	Ya Sabr	FALSE	2023-07-27 23:27:15.350261+04	2023-07-27 23:27:15.350261+04
-
- */
