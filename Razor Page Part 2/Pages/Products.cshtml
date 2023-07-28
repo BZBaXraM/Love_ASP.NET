@@ -1,0 +1,26 @@
+@page
+@using Razor_Page_part_2.Models
+@model Razor_Page_part_2.Pages.ProductsModel
+
+@{
+    Layout = null;
+}
+
+@if (!Model.Products.Any())
+{
+    <h3>No Data</h3>
+}
+else
+{
+    <h3>
+        <strong>Products</strong>
+    </h3>
+    @foreach (var item in Model.Products.ToList())
+    {
+        <p>
+            <a href="products/@item.Id" style="color: #1b6ec2">
+                @item.Name
+            </a>
+        </p>
+    }
+}

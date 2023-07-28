@@ -1,0 +1,22 @@
+@model MVC_Intro.Models.Product
+@{
+    ViewData["Title"] = "Product create";
+}
+<h1>Create Product</h1>
+<div>
+    <form asp-action="Create">
+        <p>
+            <label asp-for="Name"></label>
+            <br/>
+            <input asp-for="Name"/>
+        </p>
+        <p>
+            <label asp-for="Price"></label>
+            <br/>
+            <input asp-for="Price"/>
+        </p>
+        <p>
+            <input type="submit" value="Create"/>
+        </p>
+    </form>
+</div>

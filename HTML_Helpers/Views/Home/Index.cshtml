@@ -1,0 +1,104 @@
+﻿@model HTML_Helpers.Models.User
+@using HTML_Helpers.Models.HtmlHelpers
+@{
+    ViewData["Title"] = "Home Page";
+    var friends = new List<string>
+    {
+        "Nadir Zamanov",
+        "Ibrahim",
+        "Suleyman",
+        "Kenan",
+        "Elcin",
+        "Chingiz",
+        "Gunel",
+        "Gulya",
+        "Ellada"
+    };
+    var users = new List<User>()
+    {
+        new() { Id = 1, Login = "baxram97", Password = "1233" },
+        new() { Id = 2, Login = "mq13", Password = "012" },
+        new() { Id = 3, Login = "keks", Password = "21" },
+        new() { Id = 4, Login = "phoenix", Password = "23" },
+    };
+}
+
+<div>
+    <h1 class="display-4">Friends</h1>
+    @*     <form method="get" action="/Home/Privacy"> *@
+    @*         <input type="hidden" value="7" name="id"/> *@
+    @*         <p> *@
+    @*             <label>Login</label> *@
+    @*         </p> *@
+    @*         <p> *@
+    @*             <input type="text" name="Login"/> *@
+    @* *@
+    @*         </p> *@
+    @*         <p> *@
+    @*             <label>Password</label> *@
+    @*         </p> *@
+    @*         <p> *@
+    @*             <input type="password" name="Password"/> *@
+    @*         </p> *@
+    @*         <p> *@
+    @*             <input type="submit" value="Send"/> *@
+    @*         </p> *@
+    @*     </form> *@
+    @* @using (Html.BeginForm("Privacy", "Home", FormMethod.Get)) *@
+    @* { *@
+    @*     @Html.Hidden("Id", "13") *@
+    @*     <input type="hidden" value="7" name="id"/> *@
+    @*     <p> *@
+    @*         $1$ <label>Login</label> #1# *@
+    @*         @Html.Label("Login") *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         $1$ <input type="text" name="Login"/> #1# *@
+    @*         @Html.TextBox("Login") *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         $1$ <label>Password</label> #1# *@
+    @*         @Html.Label("Password") *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         $1$ <input type="password" name="Password"/> #1# *@
+    @*         @Html.Password("Password") *@
+    @*     </p> *@
+    @*     @Html.Label("C++") *@
+    @*     <p> *@
+    @*         @Html.RadioButton("Language", "C++") *@
+    @*     </p> *@
+    @*     @Html.Label("C#") *@
+    @*     <p> *@
+    @*         @Html.RadioButton("Language", "C#") *@
+    @*     </p> *@
+    @*     @Html.Label("JS") *@
+    @*     <p> *@
+    @*         @Html.RadioButton("Language", "JS") *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         @Html.DropDownList("Friends", new SelectList(friends)) *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         @Html.ListBox("Friends", new MultiSelectList(friends)) *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         $1$ <input type="submit" value="Send"/> #1# *@
+    @*     </p> *@
+    @* } *@
+    @* @using (@Html.BeginForm("Privacy", "Home", FormMethod.Get)) *@
+    @* { *@
+    @*     @Html.HiddenFor(x => x.Id) *@
+    @*     <p> *@
+    @*         @Html.HiddenFor(x => x.Login) *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         @Html.HiddenFor(x => x.Password) *@
+    @*     </p> *@
+    @*     <p> *@
+    @*         <input type="submit" value="Send"/> *@
+    @*     </p> *@
+    @* } *@
+    @Html.ListFor(friends, "ol", "blue", 18)
+    @Html.ListFor(users, "ol", "red", 19)
+</div>

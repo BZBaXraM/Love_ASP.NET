@@ -1,0 +1,57 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    var func = new IndexModel().FizzBuzz;
+    var name = ViewData["Name"] as string;
+    // var age = (int)ViewData["Age"]!;
+}
+
+@functions
+{
+    private string Message(string msg)
+    {
+        return msg.ToUpper();
+    }
+}
+
+@{
+    Random random = new();
+}
+
+<div class="text-center">
+    <h1 style="color: #0a53be">FizzBuzz</h1>
+    <p>
+
+        @for (int i = 0; i < 20; i++)
+        {
+            var rand = random.Next(1, 20);
+            if (i % 15 == 0)
+            {
+                <div style="color: #0a53be">FizzBuzz - @func(new[] { rand })</div>
+            }
+            else if (i % 3 == 0)
+            {
+                <div style="color: #0a53be">Fizz - @func(new[] { rand })</div>
+            }
+            else if (i % 5 == 0)
+            {
+                <div style="color: #0a53be">Buzz - @func(new[] { rand })</div>
+            }
+            @* else *@
+            @* { *@
+            @*     <div>@func(new[] { i })</div> *@
+            @* } *@
+        }
+    </p>
+    @* <p>@Message("Gun El")</p> *@
+    @* <p>@func("Ibo")</p> *@
+    @* @if (name is not null) *@
+    @* { *@
+    @*     <p>Name: @name Age: @age</p> *@
+    @* } *@
+    @* else *@
+    @* { *@
+    @*     <p>Name: Empty Age: @age</p> *@
+    @* } *@
+</div>

@@ -1,0 +1,33 @@
+﻿@page
+@using Razor_Page_part_2.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@{
+    Product product = new Product();
+}
+
+<div class="text-center">
+    <h1 class="display-4">Products</h1>
+    <form method="post">
+        <p>
+            <label asp-for="@product.Name">Name</label><br/>
+            <input type="text" asp-for="@product.Name" />
+        </p>
+        <p>
+            <label asp-for="@product.Description">Description</label><br/>
+            <input type="text" asp-for="@product.Description" />
+        </p>
+        <p>
+            <label asp-for="@product.Count">Count</label><br/>
+            <input type="text" asp-for="@product.Count" />
+        </p>
+        <p>
+            <label asp-for="@product.Price">Price</label><br/>
+            <input type="text" asp-for="@product.Price" />
+        </p>
+        <input type="submit" value="Отправить" />
+    </form>
+</div>
