@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ToDo_Web_APi.Data;
 using ToDo_Web_APi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
