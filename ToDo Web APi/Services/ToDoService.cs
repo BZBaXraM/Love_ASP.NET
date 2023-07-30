@@ -23,7 +23,6 @@ public class ToDoService : IAsyncToDoService
         _context = context;
     }
 
-
     /// <summary>
     /// 
     /// </summary>
@@ -87,7 +86,7 @@ public class ToDoService : IAsyncToDoService
         bool? isCompleted)
     {
         IQueryable<ToDoItem> query = _context.ToDoItems;
-        if (string.IsNullOrWhiteSpace(search))
+        if (!string.IsNullOrWhiteSpace(search))
         {
             query = query.Where(item => item.Text.Contains(search));
         }
@@ -105,7 +104,6 @@ public class ToDoService : IAsyncToDoService
         return new PaginationListDto<ToDoItemDto>(
             items.Select(item => ConvertToDoItemDto(item)), new PaginationMeta(page, pageSize, totalCount));
     }
-
 
     private static ToDoItemDto ConvertToDoItemDto(ToDoItem item)
     {

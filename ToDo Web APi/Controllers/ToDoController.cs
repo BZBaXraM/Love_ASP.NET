@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDo_Web_APi.Data;
 using ToDo_Web_APi.DTOs;
@@ -7,9 +8,7 @@ using ToDo_Web_APi.Services;
 
 namespace ToDo_Web_APi.Controllers;
 
-/// <summary>
-/// 
-/// </summary>
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class ToDoController : ControllerBase
@@ -32,7 +31,7 @@ public class ToDoController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<PaginationListDto<ToDoItemDto>>> Get(
+    public async Task<ActionResult<PaginationListDto<ToDoItemDto>>> GetAsync(
         [FromQuery] ToDoQueryFilters filters,
         [FromQuery] PaginationRequest request
     )
