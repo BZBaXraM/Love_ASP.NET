@@ -1,9 +1,12 @@
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ToDo_Web_APi.Auth;
 using ToDo_Web_APi.Data;
+using ToDo_Web_APi.Models;
 using ToDo_Web_APi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +16,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAuthentication("Bearer")
+
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ToDoDbContext>();
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer("Bearer", options =>
     {
         options.TokenValidationParameters =

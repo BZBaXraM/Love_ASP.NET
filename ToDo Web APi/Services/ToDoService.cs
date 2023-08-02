@@ -8,14 +8,14 @@ using ToDo_Web_APi.Models;
 namespace ToDo_Web_APi.Services;
 
 /// <summary>
-/// 
+/// ToDoService
 /// </summary>
 public class ToDoService : IAsyncToDoService
 {
     private readonly ToDoDbContext _context;
 
     /// <summary>
-    /// 
+    ///  Constructor
     /// </summary>
     /// <param name="context"></param>
     public ToDoService(ToDoDbContext context)
@@ -24,7 +24,7 @@ public class ToDoService : IAsyncToDoService
     }
 
     /// <summary>
-    /// 
+    ///  Converts ToDoItem to ToDoItemDto    
     /// </summary>
     /// <param name="id"></param>
     /// <param name="isCompleted"></param>
@@ -62,7 +62,7 @@ public class ToDoService : IAsyncToDoService
     }
 
     /// <summary>
-    /// 
+    /// Converts ToDoItem to ToDoItemDto
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -73,7 +73,7 @@ public class ToDoService : IAsyncToDoService
     }
 
     /// <summary>
-    /// 
+    ///  Converts ToDoItem to ToDoItemDto
     /// </summary>
     /// <param name="page"></param>
     /// <param name="pageSize"></param>
