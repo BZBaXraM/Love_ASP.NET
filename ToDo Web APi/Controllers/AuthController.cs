@@ -1,12 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using ToDo_Web_APi.DTOs.Auth;
 using ToDo_Web_APi.Models;
+using ToDo_Web_APi.Services.Auth;
 
 namespace ToDo_Web_APi.Controllers;
 
@@ -20,6 +17,7 @@ public class AuthController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IJwtService _jwtService;
 
     /// <summary>
     ///  Constructor
@@ -27,13 +25,16 @@ public class AuthController : ControllerBase
     /// <param name="userManager"></param>
     /// <param name="signInManager"></param>
     /// <param name="roleManager"></param>
+    /// <param name="jwtService"></param>
     public AuthController(UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager, IJwtService jwtService)
+
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
+        _jwtService = jwtService;
     }
 
     /// <summary>
@@ -59,75 +60,14 @@ public class AuthController : ControllerBase
         var role = await _userManager.GetRolesAsync(user);
         var userClaims = await _userManager.GetClaimsAsync(user);
 
-        var claims = new[]
-        {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-            new Claim(ClaimsIdentity.DefaultRoleClaimType, string.Join(",", role))
-
-            #region Without Identity adding claims
-
-            // new Claim("permissions", JsonSerializer.Serialize(new[]
-            // {
-            //     "Can Test",
-            //     "CanDelete",
-            //     "CanEdit",
-            //     "CanCreate"
-            // }))
-
-            #endregion
-        }.Concat(userClaims);
-        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes("Super Hard Secure Key"));
-        SigningCredentials signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(issuer: "https://localhost:7137",
-            audience: "https://localhost:7137", expires: DateTime.UtcNow.AddMinutes(3), claims: claims,
-            signingCredentials: signingCredentials);
-        var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+        var accessToken = _jwtService.GenerateSecurityToken(user.UserName, role, userClaims);
         var refreshToken = Guid.NewGuid().ToString("N").ToLower();
+        user.RefreshToken = refreshToken;
         await _userManager.UpdateAsync(user);
 
         return new AuthTokenDto
         {
-            AccessToken = tokenValue,
-            RefreshToken = refreshToken
-        };
-    }
-
-    /// <summary>
-    /// Refresh token
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
-    [HttpPost("refresh")]
-    public async Task<ActionResult<AuthTokenDto>> Refresh(
-        [FromBody] RefreshTokenRequest request)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
-        if (user is null)
-        {
-            return Unauthorized();
-        }
-
-        var role = await _userManager.GetRolesAsync(user);
-        var userClaims = await _userManager.GetClaimsAsync(user);
-
-        var claims = new[]
-        {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-            new Claim(ClaimsIdentity.DefaultRoleClaimType, string.Join(",", role))
-        }.Concat(userClaims);
-
-        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes("Super Hard Secure Key"));
-        SigningCredentials signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(issuer: "https://localhost:7137",
-            audience: "https://localhost:7137", expires: DateTime.UtcNow.AddMinutes(3), claims: claims,
-            signingCredentials: signingCredentials);
-        var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-        var refreshToken = user.RefreshToken;
-        await _userManager.UpdateAsync(user);
-
-        return new AuthTokenDto
-        {
-            AccessToken = tokenValue,
+            AccessToken = accessToken,
             RefreshToken = refreshToken
         };
     }
@@ -159,28 +99,40 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         }
 
+        return await GenerateToken(user);
+    }
+
+    /// <summary>
+    /// Refresh token
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("refresh")]
+    public async Task<ActionResult<AuthTokenDto>> Refresh(
+        [FromBody] RefreshTokenRequest request)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        return await GenerateToken(user);
+    }
+
+    private async Task<AuthTokenDto> GenerateToken(AppUser user)
+    {
         var role = await _userManager.GetRolesAsync(user);
         var userClaims = await _userManager.GetClaimsAsync(user);
 
-        // Copy paste from Refresh
-        var claims = new[]
-        {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-            new Claim(ClaimsIdentity.DefaultRoleClaimType, string.Join(",", role))
-        }.Concat(userClaims);
-
-        SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes("Super Hard Secure Key"));
-        SigningCredentials signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(issuer: "https://localhost:7137",
-            audience: "https://localhost:7137", expires: DateTime.UtcNow.AddMinutes(3), claims: claims,
-            signingCredentials: signingCredentials);
-        var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+        var accessToken = _jwtService.GenerateSecurityToken(user.UserName, role, userClaims);
         var refreshToken = user.RefreshToken;
+
         await _userManager.UpdateAsync(user);
 
         return new AuthTokenDto
         {
-            AccessToken = tokenValue,
+            AccessToken = accessToken,
             RefreshToken = refreshToken
         };
     }
