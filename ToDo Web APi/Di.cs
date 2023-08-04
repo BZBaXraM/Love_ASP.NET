@@ -107,7 +107,7 @@ public static class Di
             options.AddPolicy("CanTest", policy =>
             {
                 policy.RequireAuthenticatedUser();
-                policy.RequireClaim("CanTest");
+                // policy.RequireClaim("CanTest");
                 policy.Requirements.Add(new CanTestRequirment());
             });
         });

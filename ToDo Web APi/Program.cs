@@ -11,9 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-
 builder.Services.AuthenticationAndAuthorization(builder.Configuration);
+
 builder.Services.AddSwagger();
+
 builder.Services.AddDbContext<ToDoDbContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 

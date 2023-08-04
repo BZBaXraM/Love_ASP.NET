@@ -32,19 +32,8 @@ public class JwtService : IJwtService
         {
             new Claim(ClaimsIdentity.DefaultNameClaimType, email),
             new Claim(ClaimsIdentity.DefaultRoleClaimType, string.Join(",", roles))
-
-            #region Without Identity adding claims
-
-            // new Claim("permissions", JsonSerializer.Serialize(new[]
-            // {
-            //     "Can Test",
-            //     "CanDelete",
-            //     "CanEdit",
-            //     "CanCreate"
-            // }))
-
-            #endregion
         }.Concat(userClaims);
+        
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_config.Secret));
         SigningCredentials signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(issuer: "https://localhost:7137",

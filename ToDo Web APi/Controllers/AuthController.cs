@@ -38,11 +38,11 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Register a new user
+    /// Register a new user - returns new token
     /// </summary>
     /// <param name="request"></param>
     /// <returns>New token</returns>
-    [HttpPost("email")]
+    [HttpPost("login")]
     public async Task<ActionResult<AuthTokenDto>> Login([FromBody] LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
@@ -73,7 +73,25 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Register a new user
+    /// Refresh token - get new access token using refresh token
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("refresh")]
+    public async Task<ActionResult<AuthTokenDto>> Refresh(
+        [FromBody] RefreshTokenRequest request)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        return await GenerateToken(user);
+    }
+
+    /// <summary>
+    /// Register a new user - returns new token
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
@@ -97,24 +115,6 @@ public class AuthController : ControllerBase
         if (!result.Succeeded)
         {
             return BadRequest(result.Errors);
-        }
-
-        return await GenerateToken(user);
-    }
-
-    /// <summary>
-    /// Refresh token
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
-    [HttpPost("refresh")]
-    public async Task<ActionResult<AuthTokenDto>> Refresh(
-        [FromBody] RefreshTokenRequest request)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
-        if (user is null)
-        {
-            return Unauthorized();
         }
 
         return await GenerateToken(user);
