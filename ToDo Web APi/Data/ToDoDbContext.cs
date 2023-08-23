@@ -17,19 +17,7 @@ public class ToDoDbContext : IdentityDbContext<AppUser>
     {
     }
 
-    /// <summary>
-    ///  ToDoItems
-    ///  <para>Represents a table in the database.</para>
-    ///  <para>Represents a collection of entities from the database.</para>
-    ///  <para>Represents a DbSet of entities from the database.</para>    
-    /// </summary>
     public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
 
-    /// <summary>
-    /// Users
-    ///  <para>Represents a table in the database.</para>
-    ///  <para>Represents a collection of entities from the database.</para>
-    ///  <para>Represents a DbSet of entities from the database.</para>
-    /// </summary>
     public DbSet<AppUser> Users => Set<AppUser>();
 }

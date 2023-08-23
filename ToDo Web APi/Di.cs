@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using ToDo_Web_APi.Auth;
 using ToDo_Web_APi.Data;
 using ToDo_Web_APi.Models;
+using ToDo_Web_APi.Providers;
 using ToDo_Web_APi.Services.Auth;
 
 namespace ToDo_Web_APi;
@@ -71,9 +72,12 @@ public static class Di
     public static IServiceCollection AuthenticationAndAuthorization(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ToDoDbContext>();
+        services.AddScoped<IRequestUserProvider, RequestUserProvider>();
+        services.AddIdentity<AppUser, IdentityRole>()
+            .AddEntityFrameworkStores<ToDoDbContext>();
 
         services.AddScoped<IJwtService, JwtService>();
+
         JwtConfig jwtConfig = new();
         configuration.GetSection("JWT").Bind(jwtConfig);
 

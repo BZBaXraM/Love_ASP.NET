@@ -17,7 +17,10 @@ public class JwtService : IJwtService
     /// Constructor
     /// </summary>
     /// <param name="config"></param>
-    public JwtService(JwtConfig config) => _config = config;
+    public JwtService(JwtConfig config)
+    {
+        _config = config;
+    }
 
     /// <summary>
     /// GenerateSecurityToken
@@ -26,18 +29,20 @@ public class JwtService : IJwtService
     /// <param name="roles"></param>
     /// <param name="userClaims"></param>
     /// <returns></returns>
-    public string GenerateSecurityToken(string email, IEnumerable<string> roles, IEnumerable<Claim> userClaims)
+    public string GenerateSecurityToken(string id, string email, IEnumerable<string> roles,
+        IEnumerable<Claim> userClaims)
     {
         var claims = new[]
         {
             new Claim(ClaimsIdentity.DefaultNameClaimType, email),
-            new Claim(ClaimsIdentity.DefaultRoleClaimType, string.Join(",", roles))
+            new Claim(ClaimsIdentity.DefaultRoleClaimType, string.Join(",", roles)),
+            new Claim("userId", id)
         }.Concat(userClaims);
-        
+
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_config.Secret));
-        SigningCredentials signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(issuer: "https://localhost:7137",
-            audience: "https://localhost:7137", expires: DateTime.UtcNow.AddMinutes(_config.Expiration), claims: claims,
+        var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var token = new JwtSecurityToken(issuer: _config.Issuer,
+            audience: _config.Audience, expires: DateTime.UtcNow.AddMinutes(_config.Expiration), claims: claims,
             signingCredentials: signingCredentials);
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
 

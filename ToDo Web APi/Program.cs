@@ -1,6 +1,10 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using ToDo_Web_APi;
 using ToDo_Web_APi.Data;
+using ToDo_Web_APi.DTOs.Auth;
+using ToDo_Web_APi.DTOs.Validation;
 using ToDo_Web_APi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +23,9 @@ builder.Services.AddDbContext<ToDoDbContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAsyncToDoService, ToDoService>();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 
 var app = builder.Build();
 

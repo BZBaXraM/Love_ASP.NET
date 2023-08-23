@@ -6,6 +6,7 @@ namespace ToDo_Web_APi.Auth;
 
 public class CanTestRequirment : IAuthorizationRequirement, IAuthorizationHandler
 {
+    /// <inheritdoc />
     [HttpGet]
     public Task HandleAsync(AuthorizationHandlerContext context)
     {

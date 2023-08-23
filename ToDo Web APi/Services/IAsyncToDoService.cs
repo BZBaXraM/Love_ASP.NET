@@ -16,7 +16,9 @@ public interface IAsyncToDoService
     /// <param name="search"></param>
     /// <param name="isCompleted"></param>
     /// <returns></returns>
-    Task<PaginationListDto<ToDoItemDto>> GetToDoItemsAsync(int page,
+    Task<PaginationListDto<ToDoItemDto>> GetToDoItemsAsync(
+        string userId,
+        int page,
         int pageSize,
         string? search,
         bool? isCompleted);
@@ -26,18 +28,20 @@ public interface IAsyncToDoService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<ToDoItemDto> GetToDoItemAsync(int id);
+    Task<ToDoItemDto> GetToDoItemAsync(string userId, int id);
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="id"></param>
     /// <param name="isCompleted"></param>
     /// <returns></returns>
-    Task<ToDoItemDto> ChangeTodoItemStatusAsync(int id, bool isCompleted);
+    Task<ToDoItemDto> ChangeTodoItemStatusAsync(string userId, int id, bool isCompleted);
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    Task<ToDoItemDto> CreateToDoItemAsync(CreateToDoItemRequest request);
+    Task<ToDoItemDto> CreateToDoItemAsync(string userId, CreateToDoItemRequest request);
 }
