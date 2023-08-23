@@ -14,12 +14,12 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
         RuleFor(x => x.UserName).NotEmpty().MinimumLength(2).Password(mustContainDigit: false);
     }
 
-    private static bool BeValidPassword(string password)
-    {
-        return new Regex(@"\d").IsMatch(password)
-               && new Regex("[a-z]").IsMatch(password)
-               && new Regex("[A-Z]").IsMatch(password);
-    }
+    // private static bool BeValidPassword(string password)
+    // {
+    //     return new Regex(@"\d").IsMatch(password)
+    //            && new Regex("[a-z]").IsMatch(password)
+    //            && new Regex("[A-Z]").IsMatch(password);
+    // }
 }
 
 public static class ValidationRulesExtensions
