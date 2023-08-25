@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using ToDo_Web_APi;
 using ToDo_Web_APi.Data;
 using ToDo_Web_APi.DTOs.Auth;
@@ -23,6 +24,16 @@ builder.Services.AddDbContext<ToDoDbContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAsyncToDoService, ToDoService>();
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .CreateLogger();
+builder.Host.UseSerilog();
+builder.Services.AddLogging(options =>
+{
+    // options.AddJsonConsole();
+});
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();

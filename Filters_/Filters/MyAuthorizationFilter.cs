@@ -19,7 +19,8 @@ public class MyAuthorizationFilter : IAuthorizationFilter
             .Any(q => q.Key == "Password" && q.Value == "Pass123");
         if (!isLogin || !isPassword)
         {
-            context.Result = new UnauthorizedResult();
+            // context.Result = new UnauthorizedResult();
+            context.Result = new OkObjectResult("You are not authorized");
         }
     }
 }

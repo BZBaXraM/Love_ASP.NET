@@ -1,16 +1,36 @@
 ﻿@model Filters_.Models.User
 @{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <form method="get" asp-action="Welcome">
-        <p>
-            <input type="text" name="Name"/>
-        </p>
-        <p>
-            <input type="password" name="Password"/>
-        </p>
-        <input type="submit" value="Sign-in"/>
-    </form>
+@* <div class="text-center"> *@
+@*     <form method="get" asp-action="Welcome"> *@
+@*         <p> *@
+@*             <input type="text" name="Name"/> *@
+@*         </p> *@
+@*         <p> *@
+@*             <input type="password" name="Password"/> *@
+@*         </p> *@
+@*         <input type="submit" value="Sign-in"/> *@
+@*     </form> *@
+@* </div> *@
+
+<div class="card mx-auto" style="width: 25rem;">
+    <div class="card-body">
+        <label for="login_input"></label>
+        <form method="get" asp-action="Welcome">
+            <p>
+                <input type="text" class="form-control" id="login_input"
+                       aria-describedby="emailHelp" placeholder="Enter login" name="Name"/>
+            </p>
+            <p>
+                <input type="password" class="form-control" id="password_input"
+                       placeholder="Enter password" name="Password"/>
+            </p>
+            <p>
+                <button type="submit" id="search_movie" class="btn btn-primary" value="Sign-in">Login</button>
+            </p>
+        </form>
+    </div>
 </div>
