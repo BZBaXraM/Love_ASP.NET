@@ -11,7 +11,7 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
         // RuleFor(x => x.Password).NotEmpty().MinimumLength(8).Must(BeValidPassword);
         RuleFor(x => x.Password).NotEmpty().MinimumLength(8).Password(mustContainDigit: false);
-        RuleFor(x => x.UserName).NotEmpty().MinimumLength(2).Password(mustContainDigit: false);
+        // RuleFor(x => x.UserName).NotEmpty().MinimumLength(2).Password(mustContainDigit: false);
     }
 
     // private static bool BeValidPassword(string password)

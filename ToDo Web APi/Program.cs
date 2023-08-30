@@ -2,10 +2,11 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Serilog.Events;
 using ToDo_Web_APi;
 using ToDo_Web_APi.Data;
-using ToDo_Web_APi.DTOs.Auth;
 using ToDo_Web_APi.DTOs.Validation;
+using ToDo_Web_APi.Hosted_Services;
 using ToDo_Web_APi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,17 +27,34 @@ builder.Services.AddDbContext<ToDoDbContext>(options => options.UseNpgsql(
 builder.Services.AddScoped<IAsyncToDoService, ToDoService>();
 
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .WriteTo.Console()
+    //.MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.WithProcessName()
+    .Enrich.WithThreadId()
+    .Enrich.WithThreadName()
+    .WriteTo.Console(outputTemplate: "{Timestamp: yyyy / MM / dd   HH:mm:ss} {Level:w3} " +
+                                     "{Message: lj} " +
+                                     "{NewLine}" +
+                                     "ThreadId: {ThreadId} {NewLine}" +
+                                     "ThreadName: {ThreadName}{NewLine}" +
+                                     "ProcessName: {ProcessName}" +
+                                     "{Exception}" +
+                                     "{NewLine}")
+    //.WriteTo.File("log.txt",
+    //            rollingInterval: RollingInterval.Day,
+    //            rollOnFileSizeLimit: true)
     .CreateLogger();
+
 builder.Host.UseSerilog();
-builder.Services.AddLogging(options =>
-{
-    // options.AddJsonConsole();
-});
+
+builder.Services.AddHostedService<DatabaseClearJob>();
+
+builder.Services.AddLogging(options => { options.AddJsonConsole(); });
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -44,8 +62,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(x => x.EnablePersistAuthorization());
 }
+
+// app.UseResponseCaching();
 
 app.UseAuthentication();
 
